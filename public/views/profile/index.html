@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الملف الشخصي - TN M3allim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        .profile-card {
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .profile-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        .input-focus {
+            transition: all 0.2s ease-in-out;
+        }
+        .input-focus:focus {
+            border-color: #3B82F6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans" x-data="app()">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-white shadow-xl h-screen sticky top-0">
+            <div class="h-full flex flex-col">
+                <!-- Logo Section -->
+                <div class="p-6 bg-gradient-to-r from-slate-800 to-slate-700">
+                    <h1 class="text-2xl font-bold text-center text-white">
+                        TN <span class="text-yellow-400">M3allim</span>
+                    </h1>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="flex flex-col items-center py-8 bg-slate-50">
+                    <div class="relative group">
+                        <img :src="formData.profilePhoto.preview || 'img/logo.png'" 
+                             class="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover cursor-pointer"
+                             @click="document.getElementById('profilePhotoInput').click()">
+                        <div class="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                            <i class="fas fa-camera text-white text-xl"></i>
+                        </div>
+                        <span class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
+                    </div>
+                    <h2 class="mt-4 text-xl font-bold text-slate-800" x-text="formData.fullname || 'اسم الحرفي'"></h2>
+                    <p class="text-sm text-slate-500" x-text="formData.type === 'worker' ? 'حرفي متميز' : 'مستخدم'"></p>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 px-4 py-6 space-y-2">
+                    <a href="../profile/" class="flex items-center p-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                        <i class="fas fa-user-circle w-5 h-5 ml-3"></i>
+                        <span>ملف الشخصي</span>
+                    </a>
+
+                    <a href="../profile/" class="flex items-center p-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                        <i class="fas fa-chart-line w-5 h-5 ml-3"></i>
+                        <span>عرض البيانات</span>
+                    </a>
+
+                    <a href="../Signalerunproblème/" class="flex items-center p-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors">
+                        <i class="fas fa-exclamation-triangle w-5 h-5 ml-3"></i>
+                        <span>الإبلاغ عن مشكلة</span>
+                    </a>
+                </nav>
+
+                <!-- Logout Button -->
+                <div class="p-4 border-t">
+                    <button onclick="logout()" class="w-full flex items-center justify-center p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                        <i class="fas fa-sign-out-alt ml-2"></i>
+                        <span>تسجيل الخروج</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <div class="max-w-5xl mx-auto">
+                <!-- Header -->
+                <div class="mb-8">
+                    <h1 class="text-3xl font-bold text-slate-800">الملف الشخصي</h1>
+                    <p class="text-slate-600 mt-2">قم بتحديث معلوماتك الشخصية وإدارة حسابك</p>
+                </div>
+
+                <!-- Profile Form -->
+                <form @submit.prevent="submitForm" class="space-y-8">
+                    <!-- Profile Photo Section -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-camera text-blue-500 ml-2"></i>
+                            الصورة الشخصية
+                        </h2>
+                        <div class="flex flex-col items-center">
+                            <div class="relative group">
+                                <img :src="formData.profilePhoto.preview || 'img/avatar-placeholder.png'" 
+                                     class="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover cursor-pointer"
+                                     @click="document.getElementById('profilePhotoInput').click()">
+                                <div class="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
+                                    <i class="fas fa-camera text-white text-2xl"></i>
+                                </div>
+                            </div>
+                            <input type="file" id="profilePhotoInput" class="hidden" accept="image/*" @change="uploadProfilePhoto">
+                            <div class="mt-4 flex gap-2">
+                                <button type="button" @click="document.getElementById('profilePhotoInput').click()" 
+                                        class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                                    <i class="fas fa-upload ml-2"></i>
+                                    تغيير الصورة
+                                </button>
+                                <button type="button" @click="removeProfilePhoto" 
+                                        class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition-colors flex items-center"
+                                        :disabled="!formData.profilePhoto.preview">
+                                    <i class="fas fa-trash ml-2"></i>
+                                    إزالة
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Type -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-user-tag text-blue-500 ml-2"></i>
+                            نوع الحساب
+                        </h2>
+                        <select class="w-full p-3 border rounded-lg input-focus bg-gray-50" x-model="formData.type">
+                            <option value="worker">حرفي</option>
+                        </select>
+                    </div>
+
+                    <!-- General Information -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-info-circle text-blue-500 ml-2"></i>
+                            معلومات عامة
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">الإسم المستعار</label>
+                                <input type="text" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.username" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">كلمة المرور</label>
+                                <input type="password" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.password" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">تأكيد كلمة المرور</label>
+                                <input type="password" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.confirmPassword" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">الإسم الكامل</label>
+                                <input type="text" class="w-full p-3 border rounded-lg input-focus bg-gray-50" 
+                                       x-model="formData.fullname" required>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">الجنس</label>
+                                <select class="w-full p-3 border rounded-lg input-focus bg-gray-50" x-model="formData.gender">
+                                    <option value="male">ذكر</option>
+                                    <option value="female">أنثى</option>
+                                </select>
+                            </div>
+                            <div class="space-y-2">
+                                <label class="block font-medium text-gray-700">العمر</label>
+                                <select class="w-full p-3 border rounded-lg input-focus bg-gray-50" x-model="formData.age">
+                                    <template x-for="age in ages" :key="age">
+                                        <option x-text="age + ' سنة'" :value="age"></option>
+                                    </template>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Contact Information -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-address-book text-blue-500 ml-2"></i>
+                            معلومات الاتصال
+                        </h2>
+                        <div class="space-y-4">
+                            <template x-for="(contact, index) in formData.contacts" :key="index">
+                                <div class="flex gap-4 items-center bg-gray-50 p-3 rounded-lg">
+                                    <select class="p-3 border rounded-lg input-focus w-40" x-model="contact.type">
+                                        <option value="phone">
+                                            <i class="fas fa-phone"></i> هاتف
+                                        </option>
+                                        <option value="whatsapp">
+                                            <i class="fab fa-whatsapp"></i> واتساب
+                                        </option>
+                                        <option value="facebook">
+                                            <i class="fab fa-facebook"></i> فيسبوك
+                                        </option>
+                                    </select>
+                                    <input type="text" class="p-3 border rounded-lg input-focus flex-1" 
+                                           x-model="contact.value" :placeholder="contactPlaceholder(contact.type)">
+                                    <button type="button" class="text-red-500 hover:text-red-700 p-2" @click="removeContact(index)">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </template>
+                            <button type="button" 
+                                    class="inline-flex items-center text-blue-500 hover:text-blue-700 transition-colors"
+                                    @click="addContact">
+                                <i class="fas fa-plus-circle ml-2"></i>
+                                إضافة وسيلة اتصال
+                            </button>
+                        </div>
+
+                        <!-- Location Information -->
+                        <div class="mt-8 space-y-6">
+                            <h3 class="text-lg font-semibold text-slate-800">الموقع</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                <div class="space-y-2">
+                                    <label class="block font-medium text-gray-700">الدولة</label>
+                                    <select class="country w-full p-3 border rounded-lg input-focus bg-gray-50" id="country">
+                                        <option value="">اختر الدولة</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block font-medium text-gray-700">الولاية</label>
+                                    <select class="state w-full p-3 border rounded-lg input-focus bg-gray-50" id="state" disabled>
+                                        <option value="">اختر الولاية</option>
+                                    </select>
+                                </div>
+                                <div class="space-y-2">
+                                    <label class="block font-medium text-gray-700">المدينة</label>
+                                    <select class="city w-full p-3 border rounded-lg input-focus bg-gray-50" id="city" disabled>
+                                        <option value="">اختر المدينة</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Crafts Section -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm" x-show="formData.type === 'worker'">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-tools text-blue-500 ml-2"></i>
+                            الحرف والمهن
+                        </h2>
+                        <div class="space-y-4">
+                            <template x-for="(craft, index) in formData.crafts" :key="index">
+                                <div class="bg-gray-50 rounded-xl p-6">
+                                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                                        <div class="space-y-2">
+                                            <label class="block font-medium text-gray-700">الحرفة</label>
+                                            <select class="w-full p-3 border rounded-lg input-focus" x-model="craft.name">
+                                                <option value="all">جميع الحرف</option>
+                                                <option value="building">أعمال البناء الإسمنتية</option>
+                                                <option value="gypsum">أعمال الجبس والديكور الداخلي</option>
+                                                <option value="marble">تركيب الرخام</option>
+                                            </select>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="block font-medium text-gray-700">سنوات الخبرة</label>
+                                            <input type="number" class="w-full p-3 border rounded-lg input-focus" 
+                                                   x-model="craft.experience" min="0" required>
+                                        </div>
+                                        <div class="space-y-2">
+                                            <label class="block font-medium text-gray-700">مكان التدريب</label>
+                                            <select class="w-full p-3 border rounded-lg input-focus" x-model="craft.training">
+                                                <option value="self">ذاتي</option>
+                                                <option value="institution">مؤسسة</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mt-4 flex justify-end">
+                                        <button type="button" 
+                                                class="inline-flex items-center text-red-500 hover:text-red-700 transition-colors"
+                                                @click="removeCraft(index)">
+                                            <i class="fas fa-trash ml-2"></i>
+                                            حذف الحرفة
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                            <button type="button" 
+                                    class="inline-flex items-center text-green-500 hover:text-green-700 transition-colors"
+                                    @click="addCraft">
+                                <i class="fas fa-plus-circle ml-2"></i>
+                                إضافة حرفة جديدة
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Gallery Section -->
+                    <div class="profile-card bg-white p-6 rounded-xl shadow-sm">
+                        <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
+                            <i class="fas fa-images text-blue-500 ml-2"></i>
+                            معرض الأعمال
+                        </h2>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <template x-for="(image, index) in formData.images" :key="index">
+                                <div class="relative group aspect-square bg-gray-50 rounded-xl overflow-hidden">
+                                    <img :src="image.preview" class="w-full h-full object-cover">
+                                    <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                                        <button type="button" class="p-2 bg-white rounded-full text-red-500 hover:text-red-700"
+                                                @click="removeImage(index)">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button type="button" class="p-2 bg-white rounded-full text-blue-500 hover:text-blue-700"
+                                                @click="viewImage(image)">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </template>
+                            <div class="aspect-square bg-gray-50 rounded-xl border-2 border-dashed border-gray-300 flex items-center justify-center cursor-pointer hover:bg-gray-100 transition-colors"
+                                 @click="document.getElementById('galleryInput').click()">
+                                <div class="text-center">
+                                    <i class="fas fa-plus text-gray-400 text-2xl mb-2"></i>
+                                    <p class="text-sm text-gray-500">إضافة صورة</p>
+                                </div>
+                            </div>
+                        </div>
+                        <input type="file" id="galleryInput" class="hidden" accept="image/*" multiple @change="uploadGalleryImages">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="flex justify-end">
+                        <button type="submit" 
+                                class="bg-blue-500 text-white px-8 py-3 rounded-lg hover:bg-blue-600 transition-colors flex items-center">
+                            <i class="fas fa-save ml-2"></i>
+                            حفظ التغييرات
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function app() {
+            return {
+                currentPage: 'profile',
+                ages: Array.from({length: 83}, (_, i) => i + 18),
+                formData: {
+                    type: 'worker',
+                    username: '',
+                    password: '',
+                    confirmPassword: '',
+                    fullname: '',
+                    gender: 'male',
+                    age: '25',
+                    profilePhoto: {
+                        file: null,
+                        preview: null
+                    },
+                    contacts: [],
+                    crafts: [],
+                    images: []
+                },
+                uploadProfilePhoto(event) {
+                    const file = event.target.files[0];
+                    if (file) {
+                        this.formData.profilePhoto = {
+                            file: file,
+                            preview: URL.createObjectURL(file)
+                        };
+                    }
+                },
+                removeProfilePhoto() {
+                    this.formData.profilePhoto = {
+                        file: null,
+                        preview: null
+                    };
+                },
+                addContact() {
+                    this.formData.contacts.push({
+                        type: 'phone',
+                        value: ''
+                    });
+                },
+                removeContact(index) {
+                    this.formData.contacts.splice(index, 1);
+                },
+                contactPlaceholder(type) {
+                    switch(type) {
+                        case 'phone': return 'رقم الهاتف';
+                        case 'whatsapp': return 'رقم الواتساب';
+                        case 'facebook': return 'رابط الفيسبوك';
+                        default: return '';
+                    }
+                },
+                addCraft() {
+                    this.formData.crafts.push({
+                        name: '',
+                        experience: 0,
+                        training: 'self'
+                    });
+                },
+                removeCraft(index) {
+                    this.formData.crafts.splice(index, 1);
+                },
+                uploadGalleryImages(event) {
+                    const files = event.target.files;
+                    for (let file of files) {
+                        this.formData.images.push({
+                            file: file,
+                            preview: URL.createObjectURL(file)
+                        });
+                    }
+                },
+                removeImage(index) {
+                    URL.revokeObjectURL(this.formData.images[index].preview);
+                    this.formData.images.splice(index, 1);
+                },
+                viewImage(image) {
+                    // Implement image preview functionality
+                },
+                async submitForm() {
+                    // Implement form submission
+                    console.log('Form submitted:', this.formData);
+                }
+            }
+        }
+
+        function logout() {
+            window.location.href = 'login';
+        }
+    </script>
+</body>
+</html>
