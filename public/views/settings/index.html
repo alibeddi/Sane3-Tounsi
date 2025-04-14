@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-100 font-sans flex h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gradient-to-b from-green-500 to-green-700 text-white p-6 shadow-lg">
+        <h1 class="text-2xl font-bold text-center border-b pb-3">لوحة التحكم</h1>
+
+        <div class="flex flex-col items-center my-6">
+            <img class="w-20 h-20 rounded-full border-4 border-white shadow-lg" src="img/logo.png" alt="Admin">
+            <p class="mt-3 text-lg font-semibold">اسم المدير</p>
+        </div>
+
+        <nav class="mt-5 space-y-2">
+            <a href="../manage-accounts/"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                🛠️ <span class="ml-2">إدارة الحسابات</span>
+            </a>
+            <a href="../client-list/"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                👥 <span class="ml-2">قائمة الحرفاء</span>
+            </a>
+            <a href="../artisan-list"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                🏭 <span class="ml-2">قائمة الحرفيين</span>
+            </a>
+            <a href="../user-messages"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                ✉️ <span class="ml-2">رسائل المستخدم</span>
+            </a>
+            <a href="../settings"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                ⚙️ <span class="ml-2">الإعدادات</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+        <h2 class="text-xl font-semibold mb-4">⚙️ إعدادات الحساب</h2>
+
+        <div class="max-w-2xl bg-white p-6 rounded-lg shadow-md">
+            <!-- Modifier les informations personnelles -->
+            <h3 class="text-lg font-semibold mb-4">المعلومات الشخصية</h3>
+            <label class="block mb-2 text-gray-700">الاسم</label>
+            <input type="text" id="adminName" class="w-full p-2 border rounded mb-4" placeholder="اسم المدير">
+
+            <label class="block mb-2 text-gray-700">البريد الإلكتروني</label>
+            <input type="email" id="adminEmail" class="w-full p-2 border rounded mb-4" placeholder="البريد الإلكتروني">
+
+            <button onclick="updateProfile()" class="bg-green-500 text-white p-2 rounded w-full hover:bg-green-600">💾
+                حفظ التعديلات</button>
+        </div>
+
+        <!-- Modifier le mot de passe -->
+        <div class="max-w-2xl bg-white p-6 rounded-lg shadow-md mt-6">
+            <h3 class="text-lg font-semibold mb-4">🔑 تغيير كلمة المرور</h3>
+            <label class="block mb-2 text-gray-700">كلمة المرور الحالية</label>
+            <input type="password" id="currentPassword" class="w-full p-2 border rounded mb-4" placeholder="••••••••">
+
+            <label class="block mb-2 text-gray-700">كلمة المرور الجديدة</label>
+            <input type="password" id="newPassword" class="w-full p-2 border rounded mb-4" placeholder="••••••••">
+
+            <button onclick="changePassword()" class="bg-blue-500 text-white p-2 rounded w-full hover:bg-blue-600">🔄
+                تحديث كلمة المرور</button>
+        </div>
+
+        <!-- Paramètres des notifications -->
+        <div class="max-w-2xl bg-white p-6 rounded-lg shadow-md mt-6">
+            <h3 class="text-lg font-semibold mb-4">🔔 إعدادات الإشعارات</h3>
+            <div class="flex items-center justify-between mb-4">
+                <label class="text-gray-700">تفعيل الإشعارات عبر البريد الإلكتروني</label>
+                <input type="checkbox" id="emailNotifications" class="w-6 h-6">
+            </div>
+            <div class="flex items-center justify-between">
+                <label class="text-gray-700">تفعيل الإشعارات عبر الهاتف</label>
+                <input type="checkbox" id="smsNotifications" class="w-6 h-6">
+            </div>
+            <button onclick="updateNotifications()"
+                class="bg-purple-500 text-white p-2 rounded w-full hover:bg-purple-600 mt-4">🔔 حفظ التعديلات</button>
+        </div>
+    </main>
+    </div>
+
+    <script>
+        async function updateProfile() {
+            const name = document.getElementById("adminName").value;
+            const email = document.getElementById("adminEmail").value;
+
+            try {
+                const response = await fetch("http://localhost:3001/update-profile", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ name, email })
+                });
+
+                if (response.ok) {
+                    alert("✅ تم تحديث البيانات بنجاح!");
+                } else {
+                    alert("❌ حدث خطأ أثناء التحديث.");
+                }
+            } catch (error) {
+                console.error("Erreur :", error);
+                alert("❌ تعذر تحديث المعلومات.");
+            }
+        }
+
+        async function changePassword() {
+            const currentPassword = document.getElementById("currentPassword").value;
+            const newPassword = document.getElementById("newPassword").value;
+
+            try {
+                const response = await fetch("http://localhost:3001/change-password", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ currentPassword, newPassword })
+                });
+
+                if (response.ok) {
+                    alert("✅ تم تحديث كلمة المرور بنجاح!");
+                } else {
+                    alert("❌ كلمة المرور الحالية غير صحيحة.");
+                }
+            } catch (error) {
+                console.error("Erreur :", error);
+                alert("❌ فشل تحديث كلمة المرور.");
+            }
+        }
+
+        async function updateNotifications() {
+            const emailNotifications = document.getElementById("emailNotifications").checked;
+            const smsNotifications = document.getElementById("smsNotifications").checked;
+
+            try {
+                const response = await fetch("http://localhost:3001/update-notifications", {
+                    method: "PUT",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ emailNotifications, smsNotifications })
+                });
+
+                if (response.ok) {
+                    alert("✅ تم تحديث إعدادات الإشعارات بنجاح!");
+                } else {
+                    alert("❌ حدث خطأ أثناء التحديث.");
+                }
+            } catch (error) {
+                console.error("Erreur :", error);
+                alert("❌ تعذر تحديث الإشعارات.");
+            }
+        }
+    </script>
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "yEG4DJMs1tC-Gv3P3TKnA"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+</body>
+
+</html>

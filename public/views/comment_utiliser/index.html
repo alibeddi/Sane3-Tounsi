@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كيف يعمل؟ - TN M3allim</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            direction: rtl;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        header {
+            background-color: #00c853;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 26px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background: white;
+            box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 12px;
+        }
+
+        h2 {
+            color: #00c853;
+            font-size: 24px;
+            text-align: center;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .steps {
+            list-style: none;
+            padding: 0;
+            counter-reset: step-counter;
+        }
+
+        .steps li {
+            font-size: 18px;
+            padding: 12px;
+            background: #e8f5e9;
+            border-right: 5px solid #00c853;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            position: relative;
+        }
+
+        .steps li::before {
+            counter-increment: step-counter;
+            content: counter(step-counter);
+            background: #00c853;
+            color: white;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 50%;
+            position: absolute;
+            right: -18px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
+
+        .back {
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            background: #00c853;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-size: 18px;
+            transition: 0.3s ease-in-out;
+        }
+
+        .button:hover {
+            background: #00b04d;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        كيف يعمل؟ - TN M3allim
+    </header>
+
+    <div class="container">
+        <h2>كيف تعمل منصتنا؟</h2>
+        <p>تسهل منصة <strong>TN M3allim</strong> عملية البحث عن الحرفيين والتواصل معهم بكل سهولة وشفافية.</p>
+
+        <ul class="steps">
+            <li><strong>التسجيل في المنصة</strong>: يمكن للحرفيين إنشاء حساب مجاني وإضافة معلوماتهم الشخصية.</li>
+            <li><strong>إضافة الخدمات</strong>: يمكن للحرفي عرض خدماته وإضافة صور لأعماله السابقة.</li>
+            <li><strong>البحث عن الحرفيين</strong>: يمكن للعملاء البحث عن الحرفيين حسب التخصص أو الموقع.</li>
+            <li><strong>التواصل والحجز</strong>: يمكن للعملاء التواصل مباشرة مع الحرفيين وحجز المواعيد.</li>
+            <li><strong>الدفع والتقييم</strong>: يمكن للعملاء الدفع عبر الإنترنت وترك تقييم للخدمة.</li>
+        </ul>
+
+        <div class="back">
+            <a href="/" class="button">عودة إلى الصفحة الرئيسية</a>
+        </div>
+    </div>
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "yEG4DJMs1tC-Gv3P3TKnA"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+
+</body>
+
+</html>

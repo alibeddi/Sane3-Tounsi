@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم - TN M3allim</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700&display=swap');
+        body {
+            font-family: 'Tajawal', sans-serif;
+        }
+        .dashboard-card {
+            transition: transform 0.2s ease-in-out;
+        }
+        .dashboard-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+</head>
+
+<body class="bg-gray-50 font-sans">
+    <div class="flex min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-72 bg-white shadow-xl h-screen sticky top-0">
+            <div class="h-full flex flex-col">
+                <!-- Logo Section -->
+                <div class="p-6 bg-gradient-to-r from-slate-800 to-slate-700">
+                    <h1 class="text-2xl font-bold text-center text-white">
+                        TN <span class="text-yellow-400">M3allim</span>
+                    </h1>
+                </div>
+
+                <!-- Profile Section -->
+                <div class="flex flex-col items-center py-8 bg-slate-50">
+                    <div class="relative">
+                        <img class="w-24 h-24 rounded-full border-4 border-white shadow-lg object-cover" 
+                             src="img/logo.png" alt="صورة الحرفي">
+                        <span class="absolute bottom-0 right-0 w-4 h-4 bg-green-500 border-2 border-white rounded-full"></span>
+                    </div>
+                    <h2 class="mt-4 text-xl font-bold text-slate-800">اسم الحرفي</h2>
+                    <p class="text-sm text-slate-500">حرفي متميز</p>
+                </div>
+
+                <!-- Navigation -->
+                <nav class="flex-1 px-4 py-6 space-y-3">
+                    <a href="profile" class="flex items-center p-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors group">
+                        <i class="fas fa-user-circle w-5 h-5 ml-3"></i>
+                        <span>ملف الشخصي</span>
+                    </a>
+
+                    <a href="profile" class="flex items-center p-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors group">
+                        <i class="fas fa-chart-line w-5 h-5 ml-3"></i>
+                        <span>عرض البيانات</span>
+                    </a>
+
+                    <a href="Signalerunproblème" class="flex items-center p-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors group">
+                        <i class="fas fa-exclamation-triangle w-5 h-5 ml-3"></i>
+                        <span>الإبلاغ عن مشكلة</span>
+                    </a>
+                </nav>
+
+                <!-- Logout Button -->
+                <div class="p-4 border-t">
+                    <button onclick="logout()" class="w-full flex items-center justify-center p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                        <i class="fas fa-sign-out-alt ml-2"></i>
+                        <span>تسجيل الخروج</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-8">
+            <!-- Welcome Section -->
+            <div class="mb-8">
+                <h1 class="text-3xl font-bold text-slate-800 mb-2">مرحباً بك في لوحة التحكم 👋</h1>
+                <p class="text-slate-600">نتمنى لك يوماً مثمراً</p>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-blue-100 rounded-full">
+                            <i class="fas fa-tools text-blue-600"></i>
+                        </div>
+                        <div class="mr-4">
+                            <h3 class="text-lg font-semibold text-slate-800">الخدمات المقدمة</h3>
+                            <p class="text-3xl font-bold text-blue-600">12</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-green-100 rounded-full">
+                            <i class="fas fa-star text-green-600"></i>
+                        </div>
+                        <div class="mr-4">
+                            <h3 class="text-lg font-semibold text-slate-800">التقييمات</h3>
+                            <p class="text-3xl font-bold text-green-600">4.8</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="dashboard-card bg-white p-6 rounded-lg shadow-sm border border-gray-100">
+                    <div class="flex items-center">
+                        <div class="p-3 bg-yellow-100 rounded-full">
+                            <i class="fas fa-users text-yellow-600"></i>
+                        </div>
+                        <div class="mr-4">
+                            <h3 class="text-lg font-semibold text-slate-800">العملاء</h3>
+                            <p class="text-3xl font-bold text-yellow-600">45</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- About Section -->
+            <div class="bg-white rounded-lg shadow-sm border border-gray-100 p-8">
+                <h2 class="text-2xl font-bold text-slate-800 mb-6">عن TN M3allim</h2>
+                <p class="text-slate-600 leading-relaxed">
+                    مهمتنا الأساسية في TN M3allim تكمن في ربط الحرفيين ذوي الخبرة العالية بالأفراد الذين يحتاجون إلى
+                    مهاراتهم. نحن نؤمن و نثق في مهارة حرفيينا في الوطن العربي وتأثيرها في خلق عمل ذو جودة عالية يشهد بها
+                    الزبون نفسه.
+                </p>
+                <div class="mt-6 flex gap-4">
+                    <button class="px-6 py-3 bg-slate-800 text-white rounded-lg hover:bg-slate-700 transition-colors">
+                        تحديث الملف الشخصي
+                    </button>
+                    <button class="px-6 py-3 bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition-colors">
+                        إضافة خدمة جديدة
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        function logout() {
+            window.location.href = 'login';
+        }
+    </script>
+</body>
+
+</html>

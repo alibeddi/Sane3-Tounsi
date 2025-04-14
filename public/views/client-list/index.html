@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+     <!-- Inclure DataTables CSS -->
+     <link rel="stylesheet" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+     <style>
+         /* Style pour le tableau en RTL */
+         .dataTables_wrapper .dataTables_filter {
+             float: left;
+         }
+         .dataTables_wrapper .dataTables_length {
+             float: right;
+         }
+         .dataTables_wrapper .dataTables_info {
+             float: right;
+         }
+         .dataTables_wrapper .dataTables_paginate {
+             float: left;
+         }
+     </style>
+</head>
+
+<body class="bg-gray-100 font-sans flex h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-gradient-to-b from-green-500 to-green-700 text-white p-6 shadow-lg">
+        <h1 class="text-2xl font-bold text-center border-b pb-3">لوحة التحكم</h1>
+
+        <div class="flex flex-col items-center my-6">
+            <img class="w-20 h-20 rounded-full border-4 border-white shadow-lg" src="img/logo.png" alt="Admin">
+            <p class="mt-3 text-lg font-semibold">اسم المدير</p>
+        </div>
+
+        <nav class="mt-5 space-y-2">
+            <a href="manage-accounts"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                🛠️ <span class="ml-2">إدارة الحسابات</span>
+            </a>
+            <a href="client-list"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                👥 <span class="ml-2">قائمة الحرفاء</span>
+            </a>
+            <a href="artisan-list"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                🏭 <span class="ml-2">قائمة الحرفيين</span>
+            </a>
+            <a href="user-messages"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                ✉️ <span class="ml-2">رسائل المستخدم</span>
+            </a>
+            <a href="settings"
+                class="flex items-center p-3 bg-green-600 hover:bg-green-800 rounded-lg transition duration-200">
+                ⚙️ <span class="ml-2">الإعدادات</span>
+            </a>
+        </nav>
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="flex-1 p-8">
+        <h2
+            class="text-3xl font-bold text-right bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent inline-block">
+            👥 قائمة الحرفاء
+        </h2>
+        <!-- Barre de recherche -->
+        <div class="mt-4">
+            <input type="text" id="searchInput" placeholder="🔍 ابحث عن الحريف..."
+                class="w-full p-2 border rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-green-400">
+        </div>
+
+        <!-- Tableau des clients -->
+         <div class="mt-6 bg-white p-6 rounded-lg shadow-md">
+        <table id="clientTable" class="w-full text-right border-collapse">
+            <thead>
+                <tr class="bg-green-500 text-white">
+                    <th class="p-3">الرقم</th>
+                    <th class="p-3">الاسم</th>
+                    <th class="p-3">البريد الإلكتروني</th>
+                </tr>
+            </thead>
+            <tbody class="text-gray-700">
+                <!-- Les données seront insérées ici dynamiquement par DataTables -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Inclure jQuery (requis pour DataTables) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Inclure DataTables JS -->
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            // Initialiser DataTable
+            var table = $('#clientTable').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.11.5/i18n/ar.json' // Langue arabe
+                },
+                ajax: {
+                    url: "http://localhost:3001/client-list",
+                    dataSrc: ""
+                },
+                columns: [
+                    { 
+                        data: null,
+                        render: function(data, type, row, meta) {
+                            return meta.row + 1;
+                        }
+                    },
+                    { data: "nom" },
+                    { data: "email" }
+                ],
+                responsive: true,
+                initComplete: function() {
+                    console.log("Table initialisée");
+                },
+                error: function(xhr, error, thrown) {
+                    console.error("Erreur lors du chargement des données:", error);
+                }
+            });
+        });
+    </script>
+
+    <script>
+        (function () { if (!window.chatbase || window.chatbase("getState") !== "initialized") { window.chatbase = (...arguments) => { if (!window.chatbase.q) { window.chatbase.q = [] } window.chatbase.q.push(arguments) }; window.chatbase = new Proxy(window.chatbase, { get(target, prop) { if (prop === "q") { return target.q } return (...args) => target(prop, ...args) } }) } const onLoad = function () { const script = document.createElement("script"); script.src = "https://www.chatbase.co/embed.min.js"; script.id = "yEG4DJMs1tC-Gv3P3TKnA"; script.domain = "www.chatbase.co"; document.body.appendChild(script) }; if (document.readyState === "complete") { onLoad() } else { window.addEventListener("load", onLoad) } })();
+    </script>
+</body>
+</html>
