@@ -471,7 +471,11 @@
                     <!-- Profile Header -->
                     <div class="flex justify-between items-start mb-6">
                         <div class="flex items-center space-x-4">
-                            <img src="https://via.placeholder.com/100" class="w-20 h-20 rounded-full object-cover" alt="صورة الحرفي">
+<img src="/img/avatar-default.png" 
+             class="w-20 h-20 rounded-full object-cover" 
+             alt="صورة الحرفي"
+             onerror="this.src='/img/avatar-default.png'">
+
                             <div>
                                 <h2 class="text-2xl font-bold text-gray-800">أحمد بن علي</h2>
                                 <p class="text-gray-600">كهربائي محترف</p>
@@ -522,6 +526,12 @@
                                     <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">تركيب إنارة</span>
                                 </div>
                             </div>
+                            <div class="bg-gray-50 rounded-lg p-4 mt-4">
+    <h3 class="text-lg font-semibold mb-4">معرض الأعمال</h3>
+    <div id="artisanGallery" class="grid grid-cols-2 gap-4">
+        <!-- Gallery images will be loaded here dynamically -->
+    </div>
+</div>
                             <div class="bg-gray-50 rounded-lg p-4 mt-4">
             <h3 class="text-lg font-semibold mb-4">حجز موعد</h3>
             <form id="bookingForm" class="space-y-4">
@@ -641,12 +651,23 @@
         // Update showArtisanProfile function
       async function showArtisanProfile(artisanId) {
     try {
-        const response = await fetch(`/get-artisan/${artisanId}`);
-        const artisan = await response.json();
+      const [artisanResponse, galleryResponse] = await Promise.all([
+            fetch(`/get-artisan/${artisanId}`),
+            fetch(`/client/get-gallery/${artisanId}`)  // Updated path
+        ]);
         
+        const artisan = await artisanResponse.json();
+        const gallery = await galleryResponse.json();
+      console.log(gallery);
         // Update modal content with real data
         const modal = document.getElementById('artisanModal');
-        modal.querySelector('img').src = artisan.photo_profile || 'https://via.placeholder.com/100';
+        const profileImage = modal.querySelector('img');
+       profileImage.src = artisan.photo_profile ? 
+            `data:image/jpeg;base64,${artisan.photo_profile}` : 
+            '/img/avatar-default.png';
+             profileImage.onerror = function() {
+            this.src = '/img/avatar-default.png';
+        };
         modal.querySelector('h2').textContent = artisan.nom;
         modal.querySelector('p').textContent = artisan.spécialité;
         
@@ -685,7 +706,17 @@
                 <span class="inline-block bg-yellow-100 text-yellow-800 text-sm font-medium mr-2 px-2.5 py-0.5 rounded">${artisan.spécialité}</span>
             </div>
         `;
-        
+       const galleryContainer = document.getElementById('artisanGallery');
+        galleryContainer.innerHTML = gallery.length > 0 
+            ? gallery.map(image => `
+                <div class="relative aspect-square">
+                    <img src="${image.preview}" 
+                 class="w-full h-full object-cover rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                 alt="صورة من معرض الأعمال"
+                 onerror="this.src='/img/placeholder.jpg'">
+                </div>
+            `).join('') 
+            : '<p class="text-gray-500 text-center">لا توجد صور في المعرض</p>';
         // Set artisan ID for forms
         document.getElementById('artisanId').value = artisanId;
         document.getElementById('reviewArtisanId').value = artisanId;
@@ -812,7 +843,7 @@
                     <div class="review-card bg-white rounded-lg p-4 shadow-sm">
                         <div class="flex justify-between items-start mb-2">
                             <div class="flex items-center">
-                                <img src="${review.user_photo || 'https://via.placeholder.com/40'}" 
+                                <img src="${review.user_photo || '/img/avatar-default.png'}" 
                                      class="w-10 h-10 rounded-full mr-3" alt="صورة المستخدم">
                                 <div>
                                     <h5 class="font-semibold">${review.user_name}</h5>
@@ -928,12 +959,15 @@
 
         // Add filtered items
         filteredArtisans.forEach(artisan => {
+           
             // Add grid view item
             gridContainer.innerHTML += `
                 <div class="artisan-card bg-white rounded-xl shadow-md overflow-hidden hover:shadow-xl transition-shadow duration-300">
                     <div class="relative">
-                        <img src="${artisan.photo_profile || 'https://via.placeholder.com/400x300'}" 
-                             class="w-full h-48 object-cover" alt="صورة الحرفي">
+                         <img src="${artisan.photo_profile ? `data:image/jpeg;base64,${artisan.photo_profile}` : '/img/avatar-default.png'}" 
+                 class="w-full h-48 object-cover" 
+                 alt="صورة الحرفي" 
+                 onerror="this.src='/img/avatar-default.png'">
                         <div class="absolute top-2 left-2 bg-white/90 px-3 py-1 rounded-full text-sm font-semibold flex items-center">
                             <i class="fas fa-star text-yellow-400 mr-1"></i>
                             <span>${artisan.rating || 0}</span>
@@ -966,7 +1000,10 @@
                 <tr>
                     <td class="px-6 py-4 whitespace-nowrap">
                         <div class="flex items-center">
-                            <img class="h-10 w-10 rounded-full" src="${artisan.photo_profile || 'https://via.placeholder.com/40'}" alt="">
+                           <img class="h-10 w-10 rounded-full object-cover" 
+                     src="${artisan.photo_profile ? `data:image/jpeg;base64,${artisan.photo_profile}` : '/img/avatar-default.png'}" 
+                     alt="صورة الحرفي"
+                     onerror="this.src='/img/avatar-default.png'">
                             <div class="mr-4">
                                 <div class="text-sm font-medium text-gray-900">${artisan.nom}</div>
                             </div>

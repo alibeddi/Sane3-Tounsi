@@ -38,7 +38,7 @@ router.get('/get-artisans', (req, res) => {
 // Get specific artisan - modified to work with ID parameter
 router.get('/get-artisan/:id', (req, res) => {
     const query = `
-        SELECT a.*, u.nom, u.email,
+        SELECT a.*, u.nom, u.email, u.photo_profile,
         COALESCE((SELECT AVG(rating) FROM reviews WHERE artisan_id = a.id), 0) as rating,
         COALESCE((SELECT COUNT(*) FROM reviews WHERE artisan_id = a.id), 0) as review_count
         FROM artisans a 
@@ -54,7 +54,14 @@ router.get('/get-artisan/:id', (req, res) => {
         if (results.length === 0) {
             return res.status(404).json({ error: 'Artisan not found' });
         }
-        res.json(results[0]);
+
+        // Convert Buffer to base64 string if photo exists
+        const artisan = results[0];
+        if (artisan.photo_profile) {
+            artisan.photo_profile = Buffer.from(artisan.photo_profile).toString('base64');
+        }
+
+        res.json(artisan);
     });
 });
 
@@ -279,6 +286,65 @@ router.post('/profile/update', checkArtisanAuth, async (req, res) => {
             message: 'حدث خطأ أثناء تحديث الملف الشخصي' 
         });
     }
+});
+
+// Add reviews page route
+router.get('/reviews', checkArtisanAuth, (req, res) => {
+    res.render('artisan/reviews', {
+        title: 'التقييمات - TN M3allim',
+        user: {
+            id: req.session.userId,
+            role: req.session.userRole,
+            name: req.session.userName
+        },
+        active: 'reviews'
+    });
+});
+
+// Get artisan's reviews data
+router.get('/reviews/data', checkArtisanAuth, (req, res) => {
+    // First get artisan_id
+    const getArtisanIdQuery = `SELECT id FROM artisans WHERE utilisateur_id = ?`;
+    
+    db.query(getArtisanIdQuery, [req.session.userId], (err, artisanResults) => {
+        if (err) {
+            console.error('Error fetching artisan id:', err);
+            return res.status(500).json({ error: 'Error fetching reviews' });
+        }
+
+        if (artisanResults.length === 0) {
+            return res.status(404).json({ error: 'Artisan not found' });
+        }
+
+        const artisanId = artisanResults[0].id;
+
+        // Then get reviews with user information
+        const reviewsQuery = `
+            SELECT r.*, u.nom as client_name, u.photo_profile as client_photo
+            FROM reviews r
+            JOIN utilisateurs u ON r.user_id = u.id
+            WHERE r.artisan_id = ?
+            ORDER BY r.created_at DESC
+        `;
+
+        db.query(reviewsQuery, [artisanId], (err, reviews) => {
+            if (err) {
+                console.error('Error fetching reviews:', err);
+                return res.status(500).json({ error: 'Error fetching reviews' });
+            }
+
+            res.json({
+                reviews: reviews.map(review => ({
+                    id: review.id,
+                    rating: review.rating,
+                    comment: review.review_text,
+                    clientName: review.client_name,
+                    clientPhoto: review.client_photo,
+                    createdAt: review.created_at
+                }))
+            });
+        });
+    });
 });
 
 module.exports = router;

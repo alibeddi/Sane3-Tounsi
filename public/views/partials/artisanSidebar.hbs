@@ -33,8 +33,10 @@
 
             
 
-            <a href="/reviews" class="nav-link {{#if (eq active 'reviews')}}active{{/if}} flex items-center p-3 rounded-lg text-slate-600 hover:bg-slate-100 transition-colors group">
-                <i class="fas fa-star w-5 h-5 ml-3"></i>
+            <!-- Add this link in your sidebar navigation -->
+            <a href="/artisan/reviews" 
+               class="nav-link flex items-center px-6 py-3 text-gray-700 hover:bg-gray-100 {{#if (eq active 'reviews')}}active{{/if}}">
+                <i class="fas fa-star ml-3"></i>
                 <span>التقييمات</span>
             </a>
 
@@ -51,10 +53,12 @@
 
         <!-- Logout Button -->
         <div class="p-4 border-t">
-            <button onclick="logout()" class="w-full flex items-center justify-center p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
-                <i class="fas fa-sign-out-alt ml-2"></i>
-                <span>تسجيل الخروج</span>
-            </button>
+            <form action="/logout">
+                <button type="submit" class="w-full flex items-center justify-center p-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                    <i class="fas fa-sign-out-alt ml-2"></i>
+                    <span>تسجيل الخروج</span>
+                </button>
+            </form>
         </div>
     </div>
 </aside>

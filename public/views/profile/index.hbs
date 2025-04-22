@@ -75,9 +75,11 @@ ink o l        .nav-link {
                         </h2>
                         <div class="flex flex-col items-center">
                             <div class="relative group">
-                                <img :src="formData.profilePhoto.preview || (userData.photo ? '/uploads/profiles/' + userData.photo : '/img/avatar-placeholder.png')" 
+                                <!-- Update the img src attribute in the profile photo section -->
+                                <img :src="formData.profilePhoto.preview || userData.photo || '/img/avatar-placeholder.png'" 
                                      class="w-32 h-32 rounded-full border-4 border-white shadow-lg object-cover cursor-pointer"
                                      @click="document.getElementById('profilePhotoInput').click()">
+                                
                                 <div class="absolute inset-0 bg-black/30 rounded-full opacity-0 group-hover:opacity-100 flex items-center justify-center transition-opacity">
                                     <i class="fas fa-camera text-white text-2xl"></i>
                                 </div>
@@ -254,10 +256,14 @@ ink o l        .nav-link {
                             <i class="fas fa-images text-blue-500 ml-2"></i>
                             معرض الأعمال
                         </h2>
+                        <!-- Gallery Section -->
                         <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+                            <!-- Gallery Section -->
                             <template x-for="(image, index) in formData.gallery" :key="index">
                                 <div class="relative group aspect-square bg-gray-50 rounded-xl overflow-hidden">
-                                    <img :src="image.preview || ('/uploads/gallery/' + image.filename)" class="w-full h-full object-cover">
+                                    <img :src="image.preview || `/uploads/gallery/${image.image_path}`" 
+                                         class="w-full h-full object-cover"
+                                         @error="console.log('Image load error:', image); $event.target.src = '/img/placeholder.jpg'">
                                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
                                         <button type="button" class="p-2 bg-white rounded-full text-red-500 hover:text-red-700"
                                                 @click="removeImage(index)">
@@ -308,23 +314,23 @@ ink o l        .nav-link {
                 userData: {
                     id: {{user.id}},
                     role: "{{user.role}}",
-                    name: "{{{userProfile.name}}}",
-                    email: "{{{userProfile.email}}}",
-                    phone: "{{{userProfile.phone}}}",
-                    address: "{{{userProfile.address}}}",
-                    photo: "{{{userProfile.photo}}}",
-                    governorate: "{{{userProfile.governorate}}}",
-                    city: "{{{userProfile.city}}}",
-                    postalCode: "{{{userProfile.postal_code}}}",
-                    profession: "{{{artisanProfile.profession}}}",
+                    name: "{{userProfile.name}}",
+                    email: "{{userProfile.email}}",
+                    phone: "{{userProfile.phone}}",
+                    address: "{{userProfile.address}}",
+                    photo: "{{userProfile.photo}}",
+                    governorate: "{{userProfile.governorate}}",
+                    city: "{{userProfile.city}}",
+                    postalCode: "{{userProfile.postal_code}}",
+                    profession: "{{artisanProfile.profession}}",
                     experience: {{#if artisanProfile.experience}}{{artisanProfile.experience}}{{else}}0{{/if}},
                     hourlyRate: {{#if artisanProfile.hourly_rate}}{{artisanProfile.hourly_rate}}{{else}}0{{/if}},
-                    description: "{{{artisanProfile.description}}}",
+                    description: "{{artisanProfile.description}}",
                     gallery: [
                         {{#each gallery}}
                         {
                             id: {{this.id}},
-                            filename: "{{{this.filename}}}",
+                            filename: "{{this.filename}}",
                             preview: null
                         },
                         {{/each}}
@@ -357,30 +363,36 @@ ink o l        .nav-link {
                 
                 init() {
                     // Initialize form data from user data
-                    this.formData.email = this.userData.email;
-                    this.formData.fullname = this.userData.name;
-                    this.formData.phone = this.userData.phone;
-                    this.formData.address = this.userData.address;
-                    this.formData.governorate = this.userData.governorate;
-                    this.formData.city = this.userData.city;
-                    this.formData.postalCode = this.userData.postalCode;
+                    this.formData = {
+                        ...this.formData,
+                        email: this.userData.email || '',
+                        fullname: this.userData.name || '',
+                        phone: this.userData.phone || '',
+                        address: this.userData.address || '',
+                        governorate: this.userData.governorate || '',
+                        city: this.userData.city || '',
+                        postalCode: this.userData.postalCode || '',
+                        profession: this.userData.profession || '',
+                        experience: this.userData.experience || 0,
+                        hourlyRate: this.userData.hourlyRate || 0,
+                        description: this.userData.description || '',
+                        gallery: [...(this.userData.gallery || [])],
+                        galleryToRemove: []
+                    };
                     
+                    // Add this line to fetch profile data when component initializes
+                    this.fetchProfileData();
+                    console.log('Initial userData:', this.userData);
+                    console.log('Initial formData:', this.formData);
+                    
+                    // Handle profession type
                     if (this.userData.role === 'artisan') {
-                        // Check if profession is in the predefined list
-                        const predefinedProfessions = ['plumber', 'electrician', 'carpenter', 'painter', 'builder', 'tiler', 'gardener', 'cleaner', ''];
+                        const predefinedProfessions = ['plumber', 'electrician', 'carpenter', 'painter', 'builder', 'tiler', 'gardener', 'cleaner'];
                         
-                        if (predefinedProfessions.includes(this.userData.profession)) {
-                            this.formData.profession = this.userData.profession;
-                        } else {
-                            // If not in the list, set to 'other' and store the actual value
+                        if (!predefinedProfessions.includes(this.formData.profession)) {
+                            this.formData.otherProfession = this.formData.profession;
                             this.formData.profession = 'other';
-                            this.formData.otherProfession = this.userData.profession;
                         }
-                        
-                        this.formData.experience = this.userData.experience || 0;
-                        this.formData.hourlyRate = this.userData.hourlyRate || 0;
-                        this.formData.description = this.userData.description || '';
-                        this.formData.gallery = this.userData.gallery || [];
                     }
                 },
                 
@@ -429,6 +441,63 @@ ink o l        .nav-link {
                     
                     // Remove from gallery array
                     this.formData.gallery.splice(index, 1);
+                },
+                
+                async fetchProfileData() {
+                    try {
+                        // Existing profile data fetch
+                        const response = await fetch('/profile/data');
+                        const result = await response.json();
+                        
+                        // Fetch gallery images
+                        const galleryResponse = await fetch('/profile/gallery');
+                        const galleryResult = await galleryResponse.json();
+                        
+                        // Add console logs to inspect gallery data
+                        console.log('Gallery Response:', galleryResult);
+                        
+                        if (result) {
+                            // Update form data with fetched data
+                            this.formData = {
+                                ...this.formData,
+                                email: result.email || '',
+                                fullname: result.name || '',
+                                phone: result.phone || '',
+                                address: result.address || '',
+                                governorate: result.governorate || '',
+                                city: result.city || '',
+                                postalCode: result.postal_code || '',
+                            };
+                        
+                            // Update artisan specific data if available
+                            if (result.artisan) {
+                                this.formData = {
+                                    ...this.formData,
+                                    profession: result.artisan.spécialité || '',
+                                    experience: result.artisan.expérience || 0,
+                                    hourlyRate: result.artisan.tarif_horaire || 0,
+                                    description: result.artisan.description || '',
+                                };
+                            }
+                        
+                            // Update user data with the base64 photo
+                            this.userData = {
+                                ...this.userData,
+                                photo: result.photo_profile, // This will now be a base64 string
+                                role: result.rôle || this.userData.role
+                            };
+                       
+                            // Update gallery mapping in fetchProfileData
+                            this.formData.gallery = galleryResult.map(item => ({
+                            id: item.id,
+                            image_path: item.filename,  // Changed from filename to image_path
+                            preview: item.preview || null,
+                            isNew: false
+                            }));
+                        }
+                    } catch (error) {
+                        console.error('Error:', error);
+                    }
                 },
                 
                 async submitForm() {

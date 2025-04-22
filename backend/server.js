@@ -76,7 +76,8 @@ app.use((req, res, next) => {
     } : null;
     next();
 });
-
+// Add this near the top of your app configuration
+app.use('/public', express.static(path.join(__dirname, 'public')));
 // Register routes
 app.use('/', generalRoutes);
 app.use('/', authRoutes);
