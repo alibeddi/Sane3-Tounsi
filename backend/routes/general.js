@@ -4,7 +4,7 @@ const router = express.Router();
 // Route principale (using Handlebars)
 router.get('/', (req, res) => {
     res.render('index', { 
-        title: 'TN M3allim - Accueil',
+        title: 'صانع تونسي - Accueil',
         user: req.session && req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -16,7 +16,7 @@ router.get('/', (req, res) => {
 // Route for "How it works" page
 router.get('/comment_utiliser', (req, res) => {
     res.render('comment_utiliser/index', { 
-        title: 'كيف يعمل؟ - TN M3allim',
+        title: 'كيف يعمل؟ - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -28,7 +28,7 @@ router.get('/comment_utiliser', (req, res) => {
 // Route for services page
 router.get('/services', (req, res) => {
     res.render('services/index', { 
-        title: 'خدماتنا - TN M3allim',
+        title: 'خدماتنا - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -40,7 +40,7 @@ router.get('/services', (req, res) => {
 // Route for artisan list
 router.get('/listartisan', (req, res) => {
     res.render('artisan-list/index', {
-        title: 'قائمة الحرفيين - TN M3allim',
+        title: 'قائمة الحرفيين - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -51,7 +51,7 @@ router.get('/listartisan', (req, res) => {
 
 router.get('/lireplus', (req, res) => {
     res.render('lireplus/index', { 
-        title: 'مهمتنا - TN M3allim',
+        title: 'مهمتنا - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -62,7 +62,7 @@ router.get('/lireplus', (req, res) => {
 
 router.get('/viewport', (req, res) => {
     res.render('viewport/index', { 
-        title: 'تبحث عن حرفي؟ - TN M3allim',
+        title: 'تبحث عن حرفي؟ - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -73,7 +73,7 @@ router.get('/viewport', (req, res) => {
 // Add privacy policy route
 router.get('/confidentialite', (req, res) => {
     res.render('confidentialite/index', {
-        title: 'الشروط والأحكام - TN M3allim',
+        title: 'الشروط والأحكام - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -84,7 +84,7 @@ router.get('/confidentialite', (req, res) => {
 // Add privacy policy route
 router.get('/conditions', (req, res) => {
     res.render('conditions/index', {
-        title: 'سياسة الخصوصية - TN M3allim',
+        title: 'سياسة الخصوصية - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,

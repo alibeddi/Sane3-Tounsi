@@ -1,7 +1,7 @@
 {
-  "name": "tn-m3allim-backend",
+  "name": "sane3-tounsi-backend",
   "version": "1.0.0",
-  "description": "Backend for TN M3allim platform",
+  "description": "Backend for Sane3 Tounsi platform",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",

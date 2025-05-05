@@ -11,7 +11,7 @@ const fs = require('fs');
 // Route pour la page profile
 router.get('/', checkArtisanAuth,checkAuth, (req, res) => {
     res.render('profile/index', {
-        title: 'الملف الشخصي- TN M3allim',
+        title: 'الملف الشخصي- صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -51,10 +51,17 @@ router.get('/data', checkAuth, (req, res) => {
 
         const userData = results[0];
         
-        // Convert photo buffer to base64 if it exists
-        const photo_profile = userData.photo_profile 
-            ? `data:image/jpeg;base64,${userData.photo_profile.toString('base64')}`
-            : null;
+        
+        let photo_profile = null;
+        if (userData.photo_profile) {
+            if (Buffer.isBuffer(userData.photo_profile)) {
+               
+                photo_profile = `data:image/jpeg;base64,${userData.photo_profile.toString('base64')}`;
+            } else {
+               
+                photo_profile = `/public/uploads/profiles/${userData.photo_profile}`;
+            }
+        }
 
         const response = {
             id: userData.id,

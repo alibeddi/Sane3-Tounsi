@@ -1,7 +1,7 @@
 {
-  "name": "tn-m3allim",
+  "name": "sane3-tounsi",
   "version": "1.0.0",
-  "description": "TN M3allim platform",
+  "description": "Sane3 Tounsi - Tunisian Craftsmen Platform",
   "main": "app.js",
   "scripts": {
     "start": "node app.js",

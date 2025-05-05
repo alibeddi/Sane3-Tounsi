@@ -19,7 +19,7 @@ router.get('/signup', (req, res) => {
         return res.redirect('/');
     }
     res.render('signup/index', { 
-        title: 'إنشاء حساب جديد - TN M3allim',
+        title: 'إنشاء حساب جديد - صانع تونسي',
         user: null
     });
 });
@@ -151,7 +151,7 @@ router.get('/logout', (req, res) => {
 // Add GET route for forgot password page
 router.get('/forgot-password', (req, res) => {
     res.render('auth/forgot-password', {
-        title: 'نسيت كلمة المرور - TN M3allim',
+        title: 'نسيت كلمة المرور - صانع تونسي',
         user: null
     });
 });
@@ -185,7 +185,7 @@ router.post('/forgot-password', async (req, res) => {
 
         // Send email
         await transporter.sendMail({
-            from: 'tnm3allim-project@itqanlabs.com',
+            from: 'sane3tounsi-project@itqanlabs.com',
             to: email,
             subject: 'إعادة تعيين كلمة المرور',
             html: `
@@ -219,13 +219,13 @@ router.get('/reset-password/:token', async (req, res) => {
 
         if (!user.length) {
             return res.render('auth/reset-password-error', {
-                title: 'رابط غير صالح - TN M3allim',
+                title: 'رابط غير صالح - صانع تونسي',
                 message: 'رابط إعادة تعيين كلمة المرور غير صالح أو منتهي الصلاحية'
             });
         }
 
         res.render('auth/reset-password', {
-            title: 'إعادة تعيين كلمة المرور - TN M3allim',
+            title: 'إعادة تعيين كلمة المرور - صانع تونسي',
             token: token,
             user: null
         });

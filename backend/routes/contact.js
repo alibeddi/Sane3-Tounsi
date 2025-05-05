@@ -6,7 +6,7 @@ const { checkAuth } = require('../middleware/auth');
 // Route pour la page contact
 router.get('/', (req, res) => {
     res.render('contact-us/index', { 
-        title: 'تواصل معنا - TN M3allim',
+        title: 'تواصل معنا - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,

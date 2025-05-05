@@ -6,7 +6,7 @@ const { checkArtisanAuth, checkAuth } = require('../middleware/auth');  // Updat
 // Route pour la page artisan
 router.get('/', checkArtisanAuth, (req, res) => {  // Changed from checkArtisanRole to checkArtisanAuth
     res.render('artisan/index', {
-        title: 'لوحة التحكم - TN M3allim',
+        title: 'لوحة التحكم - صانع تونسي',
         user: req.session.userId ? {
             id: req.session.userId,
             role: req.session.userRole,
@@ -154,7 +154,7 @@ router.post('/book-artisan', checkAuth, async (req, res) => {
 // Add report problem route
 router.get('/report-problem', checkArtisanAuth, (req, res) => {
     res.render('report-problem/index', {
-        title: 'الإبلاغ عن مشكلة - TN M3allim',
+        title: 'الإبلاغ عن مشكلة - صانع تونسي',
         user: {
             id: req.session.userId,
             role: req.session.userRole,
@@ -230,7 +230,7 @@ router.get('/profile', checkArtisanAuth, async (req, res) => {
             
             const profile = results[0];
             res.render('profile/index', {
-                title: 'الملف الشخصي - TN M3allim',
+                title: 'الملف الشخصي - صانع تونسي',
                 user: {
                     id: req.session.userId,
                     role: req.session.userRole,
@@ -291,7 +291,7 @@ router.post('/profile/update', checkArtisanAuth, async (req, res) => {
 // Add reviews page route
 router.get('/reviews', checkArtisanAuth, (req, res) => {
     res.render('artisan/reviews', {
-        title: 'التقييمات - TN M3allim',
+        title: 'التقييمات - صانع تونسي',
         user: {
             id: req.session.userId,
             role: req.session.userRole,

@@ -293,7 +293,7 @@ router.get('/settings', checkAdminAuth, (req, res) => {
         if (err) {
             console.error('Error fetching admin data:', err);
             return res.render('settings/index', {
-                title: 'الإعدادات - TN M3allim',
+                title: 'الإعدادات - صانع تونسي',
                 user: {
                     id: req.session.userId,
                     role: req.session.userRole,
@@ -304,7 +304,7 @@ router.get('/settings', checkAdminAuth, (req, res) => {
         }
 
         res.render('settings/index', {
-            title: 'الإعدادات - TN M3allim',
+            title: 'الإعدادات - صانع تونسي',
             user: {
                 id: req.session.userId,
                 role: req.session.userRole,
@@ -379,7 +379,7 @@ router.get('/user-messages', checkAdminAuth, (req, res) => {
         if (err) {
             console.error('Error fetching messages:', err);
             return res.render('user-messages/index', {
-                title: 'رسائل المستخدمين - TN M3allim',
+                title: 'رسائل المستخدمين - صانع تونسي',
                 user: {
                     id: req.session.userId,
                     role: req.session.userRole,
@@ -391,7 +391,7 @@ router.get('/user-messages', checkAdminAuth, (req, res) => {
         }
 
         res.render('user-messages/index', {
-            title: 'رسائل المستخدمين - TN M3allim',
+            title: 'رسائل المستخدمين - صانع تونسي',
             user: {
                 id: req.session.userId,
                 role: req.session.userRole,

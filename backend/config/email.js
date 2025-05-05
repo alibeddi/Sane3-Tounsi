@@ -1,12 +1,12 @@
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-    host: 'mail.itqanlabs.com',
+    host: 'mail.alibeddi.com',
     port: 587,
     secure: false,
     auth: {
-        user: 'tnm3allim-project@itqanlabs.com',
-        pass: 'IneF9VHsJgBdQK5'
+        user: 'sane3tounsi-project@alibeddi.com',
+        pass: '---------------'
     },
     tls: {
         rejectUnauthorized: false

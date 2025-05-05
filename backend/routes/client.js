@@ -15,7 +15,7 @@ router.get('/', checkClientAuth, (req, res) => {
         if (err) {
             console.error('Error fetching artisans:', err);
             return res.render('client/index', { 
-                title: 'TN M3allim - Client',
+                title: 'صانع تونسي - Client',
                 artisans: []
             });
         }
@@ -32,7 +32,7 @@ router.get('/', checkClientAuth, (req, res) => {
         }));
 
         res.render('client/index', { 
-            title: 'TN M3allim - Client',
+            title: 'صانع تونسي - Client',
             artisans: formattedArtisans
         });
     });
