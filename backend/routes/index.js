@@ -1,7 +1,7 @@
 // Add report problem route
 router.get('/report-problem', checkAuth, (req, res) => {
     res.render('report-problem/index', {
-        title: 'الإبلاغ عن مشكلة - TN M3allim',
+        title: 'الإبلاغ عن مشكلة - صانع تونسي',
         user: {
             id: req.session.userId,
             role: req.session.userRole,

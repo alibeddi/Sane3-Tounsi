@@ -1,27 +1,19 @@
-<<<<<<< HEAD
-# pfe-mahden
-=======
-# tnm3allim
-# tn_m3allim3
-# tnpro
-# tn_me3allim
-# tn___m3allim
-# tn_me3allim1
-# tn_project
-# tn
-# tnprof
-# tnprom3allim
-# tn_m3allim2
-# tnpro-
-<<<<<<< HEAD
-=======
-# tnpro-
->>>>>>> 1d1e2ca (first commit)
-# djo
-# djoo
-# tnme3alim
-# PROJETPFE
-# projetpfe1
-# projet_pfe
-# projet_pfe
->>>>>>> backup-main
+# Sane3 Tounsi
+
+## Tunisian Craftsmen Platform
+
+Sane3 Tounsi is a platform connecting skilled Tunisian craftsmen with clients who need their services. The platform helps showcase local talent and traditional craftsmanship while providing economic opportunities for artisans across Tunisia.
+
+### Features
+- Artisan profiles with portfolios
+- Client accounts
+- Service booking system
+- Rating and review system
+- Search by location and specialty
+
+### Technologies
+- Node.js
+- Express
+- MySQL
+- Handlebars (HBS)
+- TailwindCSS
